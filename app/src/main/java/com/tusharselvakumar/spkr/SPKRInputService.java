@@ -1,11 +1,14 @@
 package com.tusharselvakumar.spkr;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.inputmethodservice.InputMethodService;
 import android.os.Handler;
 import android.os.Looper;
 import android.speech.tts.TextToSpeech;
 
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 import android.widget.Button;
@@ -18,9 +21,13 @@ import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.translate.*;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 
@@ -40,7 +47,22 @@ public class SPKRInputService extends InputMethodService {
         if (currentLayout == LAYOUT_HEAR) {
             inputView = getLayoutInflater().inflate(R.layout.keyboard_layout_hear, null);
 
-            System.setProperty("GOOGLE_API_KEY", "AIzaSyCiLb6TjmziGfsGAFKaM-bf6tg-yVY3ksE");
+            AssetManager assetManager = getAssets();
+            CredentialsReader credentialsReader = new CredentialsReader(assetManager);
+            JSONObject credentialsJson = credentialsReader.readCredentialsJson();
+
+            // Now you can access the JSON data as needed
+            // For example, retrieving the API key:
+            String apiKey = "";
+            try {
+                apiKey = credentialsJson.getString("APIKEY");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            System.setProperty("GOOGLE_API_KEY",apiKey);
+            Toast.makeText(getApplicationContext(),apiKey,Toast.LENGTH_LONG).show();
+
             sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
             Button switchToSpeakButton = inputView.findViewById(R.id.switchToSpeakButton);
@@ -141,6 +163,34 @@ public class SPKRInputService extends InputMethodService {
         return inputView;
     }
 
+    public class CredentialsReader {
+        private AssetManager assetManager;
+
+        public CredentialsReader(AssetManager assetManager) {
+            this.assetManager = assetManager;
+        }
+
+        public JSONObject readCredentialsJson() {
+            JSONObject jsonObject = null;
+            try {
+                // Open the JSON file
+                InputStream inputStream = assetManager.open("credentials.json");
+
+                // Read the content of the JSON file into a String
+                int size = inputStream.available();
+                byte[] buffer = new byte[size];
+                inputStream.read(buffer);
+                inputStream.close();
+                String jsonString = new String(buffer, StandardCharsets.UTF_8);
+
+                // Convert the JSON String to a JSONObject
+                jsonObject = new JSONObject(jsonString);
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+            return jsonObject;
+        }
+    }
     public String translateTextToUserLang(final String userText, String outputLanguage) {
         final String[] result = {null};
 
