@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#212121"
+    android:backgroundTint="#212121"
+    android:orientation="horizontal">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="231dp"
+        android:layout_weight="1"
+        android:backgroundTint="#212121">
+
+        <Button
+            android:id="@+id/key_c"
+            android:layout_width="58dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/keyBtn"
+            android:onClick="onKeyClick"
+            android:text="C"
+            android:textColor="#070707"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/key_b" />
+
+        <Button
+            android:id="@+id/backspaceButton"
+            android:layout_width="72dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginBottom="32dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/keyBtn"
+            android:onClick="onBackspaceClick"
+            android:text="⌫"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/key_c" />
+
+        <Button
+            android:id="@+id/key_d"
+            android:layout_width="58dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/keyBtn"
+            android:onClick="onKeyClick"
+            android:text="D"
+            android:textColor="#070707"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/key_b"
+            android:layout_width="58dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/keyBtn"
+            android:onClick="onKeyClick"
+            android:text="B"
+            android:textColor="#070707"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/key_d" />
+
+        <Button
+            android:id="@+id/key_a"
+            android:layout_width="127dp"
+            android:layout_height="118dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="64dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/keyBtn"
+            android:onClick="onKeyClick"
+            android:text="🎙️"
+            android:textColor="#070707"
+            android:textSize="48sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/switchToHearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="132dp"
+            android:backgroundTint="@color/changeBtn"
+            android:onClick="onSwitchToHearClick"
+            android:text="Switch to Hear"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="language_options">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Italian</item>
+        <item>Portuguese</item>
+        <item>Dutch</item>
+        <item>Russian</item>
+        <item>Chinese (Simplified)</item>
+        <item>Chinese (Traditional)</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+        <item>Arabic</item>
+        <item>Turkish</item>
+        <item>Hindi</item>
+        <item>Bengali</item>
+        <item>Urdu</item>
+        <item>Vietnamese</item>
+        <item>Thai</item>
+        <item>Greek</item>
+        <item>Hebrew</item>
+        <item>Polish</item>
+        <item>Romanian</item>
+        <item>Czech</item>
+        <item>Swedish</item>
+        <item>Danish</item>
+        <item>Norwegian</item>
+        <item>Finnish</item>
+        <item>Hungarian</item>
+        <item>Ukrainian</item>
+        <item>Malay</item>
+        <item>Indonesian</item>
+        <item>Filipino</item>
+        <item>Malayalam</item>
+        <item>Tamil</item>
+        <item>Telugu</item>
+        <item>Marathi</item>
+        <item>Kannada</item>
+        <item>Punjabi</item>
+        <item>Gujarati</item>
+    </string-array>
+</resources>
