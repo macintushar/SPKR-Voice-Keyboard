@@ -37,6 +37,7 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/keyBtn"
             android:text="⌫"
+            android:textColor="#FFEBEE"
             android:textSize="34sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

@@ -1,33 +1,45 @@
 package com.tusharselvakumar.spkr;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.inputmethodservice.InputMethodService;
-import android.os.Handler;
-import android.os.Looper;
+import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 import android.widget.Button;
 
 import android.widget.EditText;
 
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.auth.Credentials;
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.translate.*;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -40,6 +52,11 @@ public class SPKRInputService extends InputMethodService {
     private TextToSpeech t1;
     private SharedPreferences sharedPreferences;
     private Translate translate;
+    public static final Integer RecordAudioRequestCode = 1;
+    private SpeechRecognizer speechRecognizer;
+    private String SpeechToTextOP;
+    private String userLang = "en";
+    private ImageView micButton;
 
     @Override
     public View onCreateInputView() {
@@ -51,8 +68,6 @@ public class SPKRInputService extends InputMethodService {
             CredentialsReader credentialsReader = new CredentialsReader(assetManager);
             JSONObject credentialsJson = credentialsReader.readCredentialsJson();
 
-            // Now you can access the JSON data as needed
-            // For example, retrieving the API key:
             String apiKey = "";
             try {
                 apiKey = credentialsJson.getString("APIKEY");
@@ -61,7 +76,7 @@ public class SPKRInputService extends InputMethodService {
             }
 
             System.setProperty("GOOGLE_API_KEY",apiKey);
-            Toast.makeText(getApplicationContext(),apiKey,Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(),apiKey,Toast.LENGTH_LONG).show();
 
             sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
@@ -77,49 +92,126 @@ public class SPKRInputService extends InputMethodService {
                 }
             });
 
-
             hearBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     String userInputText = text.getText().toString();
                     String userLanguage = sharedPreferences.getString("userLanguage", "en");
+                    userLang = userLanguage;
                     String translatedToUserLanguageText = translateTextToUserLang(userInputText, userLanguage);
                     playTranslatedAudio(translatedToUserLanguageText);
 
-                    String msg = userInputText;
-                    Toast.makeText(getApplicationContext(), msg,Toast.LENGTH_SHORT).show();
+//                    String usageHistory = loadHistory(getApplicationContext());
+//                    text.setText(usageHistory);
                 }
             });
 
-
+            clearBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    text.setText("");
+                }
+            });
 
 
         } else {
             inputView = getLayoutInflater().inflate(R.layout.keyboard_layout_speak, null);
 
             Button buttonA = inputView.findViewById(R.id.key_a);
-            Button buttonB = inputView.findViewById(R.id.key_b);
+            ImageButton historyBtn = (ImageButton) inputView.findViewById(R.id.historyBtn);
             Button buttonC = inputView.findViewById(R.id.key_c);
             Button buttonD = inputView.findViewById(R.id.key_d);
             Button backspaceBtn = inputView.findViewById(R.id.backspaceButton);
+            TextView tv = inputView.findViewById(R.id.textView3);
+            micButton = inputView.findViewById(R.id.button);
 
             int recordState = 0;
 
-            buttonA.setOnClickListener(new View.OnClickListener() {
+            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(getApplicationContext());
+
+            final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ta");
+
+            speechRecognizer.setRecognitionListener(new RecognitionListener() {
                 @Override
-                public void onClick(View v) {
-                    if (currentLayout == LAYOUT_SPEAK) {
-                        Toast.makeText(getApplicationContext(),"Recording",Toast.LENGTH_SHORT).show();
-                    }
+                public void onReadyForSpeech(Bundle bundle) {
+
+                }
+
+                @Override
+                public void onBeginningOfSpeech() {
+                    //Toast.makeText(getApplicationContext(),"Listening...",Toast.LENGTH_SHORT).show();
+                    tv.setText("Listening...");
+                }
+
+                @Override
+                public void onRmsChanged(float v) {
+
+                }
+
+                @Override
+                public void onBufferReceived(byte[] bytes) {
+
+                }
+
+                @Override
+                public void onEndOfSpeech() {
+
+                }
+
+                @Override
+                public void onError(int i) {
+                    tv.setText("Error" + String.valueOf(i));
+                }
+
+                @Override
+                public void onResults(Bundle bundle) {
+                    ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                    SpeechToTextOP = data.get(0);
+                    tv.setText(data.get(0));
+                }
+
+                @Override
+                public void onPartialResults(Bundle bundle) {
+
+                }
+
+                @Override
+                public void onEvent(int i, Bundle bundle) {
+
                 }
             });
 
-            buttonB.setOnClickListener(new View.OnClickListener() {
+            buttonA.setOnTouchListener((view, motionEvent) -> {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP){
+                    speechRecognizer.stopListening();
+                }
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    speechRecognizer.startListening(speechRecognizerIntent);
+                }
+                return false;
+            });
+
+            micButton.setOnTouchListener((view, motionEvent) -> {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP){
+                    speechRecognizer.stopListening();
+                }
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    speechRecognizer.startListening(speechRecognizerIntent);
+                    tv.setText("Starting Listener");
+                }
+                return false;
+            });
+
+            historyBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (currentLayout == LAYOUT_SPEAK) {
-                        onKeyClick(v);
+                        String history = loadHistory(getApplicationContext());
+                        //Toast.makeText(getApplicationContext(), history, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),userLang,Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -128,7 +220,7 @@ public class SPKRInputService extends InputMethodService {
                 @Override
                 public void onClick(View v) {
                     if (currentLayout == LAYOUT_SPEAK) {
-                        onKeyClick(v);
+                        onKeyClick(v,"C");
                     }
                 }
             });
@@ -137,7 +229,8 @@ public class SPKRInputService extends InputMethodService {
                 @Override
                 public void onClick(View v) {
                     if (currentLayout == LAYOUT_SPEAK) {
-                        onKeyClick(v);
+                        onKeyClick(v,SpeechToTextOP);
+                        Toast.makeText(getApplicationContext(),SpeechToTextOP,Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -159,7 +252,6 @@ public class SPKRInputService extends InputMethodService {
                 }
             });
         }
-
         return inputView;
     }
 
@@ -173,10 +265,8 @@ public class SPKRInputService extends InputMethodService {
         public JSONObject readCredentialsJson() {
             JSONObject jsonObject = null;
             try {
-                // Open the JSON file
                 InputStream inputStream = assetManager.open("credentials.json");
 
-                // Read the content of the JSON file into a String
                 int size = inputStream.available();
                 byte[] buffer = new byte[size];
                 inputStream.read(buffer);
@@ -191,6 +281,68 @@ public class SPKRInputService extends InputMethodService {
             return jsonObject;
         }
     }
+
+    public String loadHistory(Context context) {
+        String json = null;
+        try {
+            FileInputStream fis = context.openFileInput("local_history.json");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder jsonStringBuilder = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                jsonStringBuilder.append(line);
+            }
+            bufferedReader.close();
+
+            json = jsonStringBuilder.toString();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return json;
+    }
+
+    public void addToHistory(Context context, String userLanguage, String targetLanguage, String translatedText, String originalText) {
+        try {
+            FileInputStream fis = context.openFileInput("local_history.json");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder jsonStringBuilder = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                jsonStringBuilder.append(line);
+            }
+            bufferedReader.close();
+
+            String jsonStr = jsonStringBuilder.toString();
+            JSONObject jsonObject = new JSONObject(jsonStr);
+
+            JSONObject historyEntry = new JSONObject();
+            historyEntry.put("userLanguage", userLanguage);
+            historyEntry.put("targetLanguage", targetLanguage);
+            historyEntry.put("translatedText", translatedText);
+            historyEntry.put("originalText", originalText);
+
+            String timestamp = getCurrentTimestamp();
+            jsonObject.put(timestamp, historyEntry);
+
+            String newJsonStr = jsonObject.toString();
+
+            FileOutputStream fos = context.openFileOutput("local_history.json", Context.MODE_PRIVATE);
+            fos.write(newJsonStr.getBytes());
+            fos.close();
+
+        } catch (IOException | JSONException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static String getCurrentTimestamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy:HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date());
+    }
+
     public String translateTextToUserLang(final String userText, String outputLanguage) {
         final String[] result = {null};
 
@@ -200,24 +352,26 @@ public class SPKRInputService extends InputMethodService {
                 Translate translate = TranslateOptions.getDefaultInstance().getService();
                 try {
                     Translate translateService = TranslateOptions.getDefaultInstance().getService();
-
+                    Translation translation = null;
+                    
                     Detection detection = translateService.detect(userText);
                     String detectedLanguage = detection.getLanguage();
 
-                    Translation translation = translateService.translate(
+                    translation = translateService.translate(
                             userText,
                             Translate.TranslateOption.sourceLanguage(detectedLanguage),
                             Translate.TranslateOption.targetLanguage(outputLanguage)
                     );
-
                     final String translatedText = translation.getTranslatedText();
+
+                    addToHistory(getApplicationContext(),detectedLanguage,outputLanguage,translatedText,userText);
 
                     // Set the translated text result
                     synchronized (result) {
                         result[0] = translatedText;
                     }
 
-                } catch (com.google.cloud.translate.TranslateException e) {
+                } catch (TranslateException e) {
                     // Handle the exception
                     e.printStackTrace();
                     result[0] = "Failed: " + e;
@@ -273,11 +427,11 @@ public class SPKRInputService extends InputMethodService {
         InputConnection inputConnection = getCurrentInputConnection();
         inputConnection.deleteSurroundingText(1, 0);
     }
-    public void onKeyClick(View view) {
+    public void onKeyClick(View view, String text) {
         if (view instanceof Button) {
-            String keyText = ((Button) view).getText().toString();
+            //String keyText = ((Button) view).getText().toString();
             InputConnection inputConnection = getCurrentInputConnection();
-            inputConnection.commitText(keyText, 1);
+            inputConnection.commitText(text, 1);
         }
     }
 }

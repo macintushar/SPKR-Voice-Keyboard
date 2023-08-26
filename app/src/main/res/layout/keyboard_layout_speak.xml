@@ -18,35 +18,35 @@
             android:id="@+id/key_c"
             android:layout_width="58dp"
             android:layout_height="49dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="16dp"
             android:layout_weight="1"
             android:backgroundTint="@color/keyBtn"
             android:onClick="onKeyClick"
             android:text="C"
             android:textColor="#070707"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/key_b" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/backspaceButton"
             android:layout_width="72dp"
             android:layout_height="48dp"
-            android:layout_marginEnd="44dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="16dp"
             android:layout_weight="1"
             android:backgroundTint="@color/keyBtn"
             android:onClick="onBackspaceClick"
             android:text="⌫"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/key_c" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/key_d"
             android:layout_width="58dp"
             android:layout_height="49dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:layout_weight="1"
             android:backgroundTint="@color/keyBtn"
@@ -57,20 +57,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/key_b"
-            android:layout_width="58dp"
-            android:layout_height="49dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/keyBtn"
-            android:onClick="onKeyClick"
-            android:text="B"
-            android:textColor="#070707"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/key_d" />
-
-        <Button
             android:id="@+id/key_a"
             android:layout_width="127dp"
             android:layout_height="118dp"
@@ -78,12 +64,24 @@
             android:layout_marginTop="64dp"
             android:layout_weight="1"
             android:backgroundTint="@color/keyBtn"
-            android:onClick="onKeyClick"
             android:text="🎙️"
             android:textColor="#070707"
             android:textSize="48sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="184dp"
+            android:layout_marginBottom="96dp"
+            android:backgroundTint="#F9F8FA"
+            android:paddingRight="10dp"
+            android:src="@android:drawable/ic_btn_speak_now"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/switchToHearButton"
@@ -95,6 +93,28 @@
             android:onClick="onSwitchToHearClick"
             android:text="Switch to Hear"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/historyBtn"
+            android:layout_width="58dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="96dp"
+            android:layout_marginEnd="12dp"
+            android:background="@color/keyBtn"
+            android:scaleType="centerInside"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/history" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="TextView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
