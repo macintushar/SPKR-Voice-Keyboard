@@ -14,5 +14,5 @@
 .cxx
 local.properties
 credentials.json
-app/google-credentials.json
+app/google-services.json
 
