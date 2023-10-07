@@ -10,8 +10,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="231dp"
-        android:layout_weight="1">
+        android:layout_height="252dp"
+        android:layout_weight="1"
+        android:background="@color/black"
+        android:backgroundTint="@color/black">
 
         <!-- Text Box -->
 
@@ -47,17 +49,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="128dp"
+            android:layout_marginEnd="116dp"
             android:backgroundTint="@color/changeBtn"
+            android:fontFamily="@font/roboto_mono_bold"
             android:onClick="onSwitchToSpeakClick"
             android:text="Switch to Speak"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/textToSpeechText"
-            android:layout_width="289dp"
-            android:layout_height="137dp"
+            android:layout_width="288dp"
+            android:layout_height="162dp"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
             android:background="#FFFFFF"

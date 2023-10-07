@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SPKR - Voice Keyboard</string>
+    <string name="chooseUserLang">Choisissez la langue dans laquelle vous parlez</string>
+    <string name="chooseOPLang">Choisissez la langue pour parler avec d\'autres personnes</string>
+    <string name="switchToHear" translatable="false">passer pour parler</string>
+    <string name="switchToSpeak" translatable="false">passer pour entendre</string>
+</resources>

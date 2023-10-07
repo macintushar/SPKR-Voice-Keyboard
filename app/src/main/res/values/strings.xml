@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">SPKR - Voice Keyboard</string>
+    <string name="chooseUserLang" translatable="false">Choose the language you speak in</string>
+    <string name="chooseOPLang" translatable="false">Choose the language to speak with other people</string>
+    <string name="switchToHear" translatable="false">Switch to Speak</string>
+    <string name="switchToSpeak" translatable="false">Switch to Hear</string>
 </resources>

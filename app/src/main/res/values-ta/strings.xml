@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SPKR - Voice Keyboard</string>
+    <string name="chooseUserLang">நீங்கள் பேசும் மொழியை தேர்வு செய்யவும்</string>
+    <string name="chooseOPLang">மற்றவர்களுடன் பேசுவதற்கு மொழியைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="switchToHear" translatable="false">பேச மாற</string>
+    <string name="switchToSpeak" translatable="false">கேட்க மாறவும்</string>
+</resources>
