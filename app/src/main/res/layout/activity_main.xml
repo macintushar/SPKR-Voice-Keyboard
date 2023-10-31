@@ -12,59 +12,36 @@
     <TextView
         android:id="@+id/textView2"
         android:layout_width="404dp"
-        android:layout_height="51dp"
-        android:text="@string/chooseUserLang"
+        android:layout_height="33dp"
+        android:text="Keyboard Background Color"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.295"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.231" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/chooseOPLang"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.468" />
+        app:layout_constraintVertical_bias="0.244" />
 
     <Spinner
-        android:id="@+id/languageSpinner"
+        android:id="@+id/colorSpinner"
+        style="@style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar"
         android:layout_width="300dp"
         android:layout_height="62dp"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="56dp"
-        android:background="#CFCFCF"
-        android:dropDownWidth="match_parent"
-        android:dropDownSelector="@android:drawable/list_selector_background"
-        android:spinnerMode="dropdown"
+        android:background="@color/white"
+        android:theme="@style/CardView.Dark"
+        android:color="@color/black"
+        android:dropDownWidth="wrap_content"
+        android:spinnerMode="dialog"
+        android:backgroundTint="@color/black"
+        android:backgroundTintMode="add"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-    <Spinner
-        android:id="@+id/languageSpinner2"
-        android:layout_width="300dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="32dp"
-        android:background="#CFCFCF"
-        android:dropDownWidth="match_parent"
-        android:dropDownSelector="@android:drawable/list_selector_background"
-        android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <ImageView
         android:id="@+id/imageView"

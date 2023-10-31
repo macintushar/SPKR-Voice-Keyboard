@@ -7,17 +7,14 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.speech.RecognitionListener;
-import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Pair;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,7 +27,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     public static final Integer RecordAudioRequestCode = 1;
@@ -50,129 +46,49 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        opLang = findViewById(R.id.textView);
         inLang = findViewById(R.id.textView2);
 
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
             checkPermission();
         }
 
-        Spinner languageSpinner = (Spinner) findViewById(R.id.languageSpinner);
-        Spinner languageSpinner2 = (Spinner) findViewById(R.id.languageSpinner2);
+        Spinner colorSpinner = (Spinner) findViewById(R.id.colorSpinner);
 
-        List<Pair<String, String>> languageList = new ArrayList<>();
+        List<Pair<String, Integer>> colorList = new ArrayList<>();
 
-        languageList.add(new Pair<>("English", "en"));
-        languageList.add(new Pair<>("Tamil", "ta"));
-        languageList.add(new Pair<>("Kannada", "kn"));
-        languageList.add(new Pair<>("Hindi", "hi"));
-        languageList.add(new Pair<>("Malayalam", "ml"));
-        languageList.add(new Pair<>("Japanese", "ja"));
-        languageList.add(new Pair<>("Spanish", "es"));
-        languageList.add(new Pair<>("French", "fr"));
-        languageList.add(new Pair<>("German", "de"));
-        languageList.add(new Pair<>("Italian", "it"));
-        languageList.add(new Pair<>("Portuguese", "pt"));
-        languageList.add(new Pair<>("Dutch", "nl"));
-        languageList.add(new Pair<>("Chinese (Simplified)", "zh-CN"));
-        languageList.add(new Pair<>("Chinese (Traditional)", "zh-TW"));
-        languageList.add(new Pair<>("Korean", "ko"));
-        languageList.add(new Pair<>("Arabic", "ar"));
-        languageList.add(new Pair<>("Bengali", "bn"));
-        languageList.add(new Pair<>("Urdu", "ur"));
-        languageList.add(new Pair<>("Vietnamese", "vi"));
-        languageList.add(new Pair<>("Thai", "th"));
-        languageList.add(new Pair<>("Swedish", "sv"));
-        languageList.add(new Pair<>("Danish", "da"));
-        languageList.add(new Pair<>("Malay", "ms"));
-        languageList.add(new Pair<>("Indonesian", "id"));
-        languageList.add(new Pair<>("Telugu", "te"));
-        languageList.add(new Pair<>("Punjabi", "pa"));
-
+        colorList.add(new Pair<>("Black", Color.BLACK));
+        colorList.add(new Pair<>("Light Gray", Color.LTGRAY));
+        colorList.add(new Pair<>("Dark Gray", Color.DKGRAY));
 
         // Extract display text for ArrayAdapter
         List<String> displayTexts = new ArrayList<>();
-        for (Pair<String, String> languagePair : languageList) {
-            displayTexts.add(languagePair.first);
+        for (Pair<String, Integer> colorPair : colorList) {
+            displayTexts.add(colorPair.first);
         }
 
         // Set up ArrayAdapter for the Spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, displayTexts);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        languageSpinner.setAdapter(adapter);
-        languageSpinner2.setAdapter(adapter);
+        colorSpinner.setAdapter(adapter);
 
-
-        languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        colorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Pair<String, String> selectedPair = languageList.get(position);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Pair<String, Integer> selectedPair = colorList.get(i);
                 String selectedLanguage = selectedPair.first;
-                String selectedValue = selectedPair.second;
+                Integer selectedValue = selectedPair.second;
 
-                Toast.makeText(getApplicationContext(), "Selected Language: " + selectedLanguage + " (Value: " + selectedValue + ")", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Selected Color: " + selectedLanguage, Toast.LENGTH_SHORT).show();
 
                 SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("userLanguage", selectedValue);
+                editor.putInt("keyboardBackground", selectedValue);
                 editor.apply();
-
-                if (selectedLanguage == "English") {
-                    context = LocaleHelper.setLocale(MainActivity.this, "en");
-                    resources = context.getResources();
-                    inLang.setText((resources.getString(R.string.chooseUserLang)));
-                    opLang.setText((resources.getString(R.string.chooseOPLang)));
-
-                }
-                if (selectedLanguage == "Hindi") {
-                    context = LocaleHelper.setLocale(MainActivity.this, "hi");
-                    resources = context.getResources();
-                    inLang.setText((resources.getString(R.string.chooseUserLang)));
-                    opLang.setText((resources.getString(R.string.chooseOPLang)));
-                }
-                if (selectedLanguage == "Tamil") {
-                    context = LocaleHelper.setLocale(MainActivity.this, "ta");
-                    resources = context.getResources();
-                    inLang.setText((resources.getString(R.string.chooseUserLang)));
-                    opLang.setText((resources.getString(R.string.chooseOPLang)));
-                }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // Do nothing
-            }
-        });
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-        languageSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Pair<String, String> selectedPair = languageList.get(position);
-                String selectedLanguage = selectedPair.first;
-                String selectedValue = selectedPair.second;
-
-                Toast.makeText(getApplicationContext(), "Selected Language: " + selectedLanguage + " (Value: " + selectedValue + ")", Toast.LENGTH_SHORT).show();
-
-                SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("outputLanguage", selectedValue);
-                editor.apply();
-
-                if (selectedLanguage == "English") {
-                    context = LocaleHelper.setLocale(MainActivity.this, "en");
-                    resources = context.getResources();
-                }
-                if (selectedLanguage == "Hindi") {
-                    context = LocaleHelper.setLocale(MainActivity.this, "hi");
-                    resources = context.getResources();
-                }
-                if (selectedLanguage == "Tamil") {
-                    context = LocaleHelper.setLocale(MainActivity.this, "ta");
-                    resources = context.getResources();
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // Do nothing
             }
         });
     }
