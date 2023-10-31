@@ -217,7 +217,7 @@ public class SPKRInputService extends InputMethodService {
 
             @Override
             public void onBeginningOfSpeech() {
-                micButton.setImageResource(R.drawable.mic_active);
+                micButton.setImageResource(R.drawable.microphone_active);
             }
 
             @Override
@@ -466,7 +466,7 @@ public class SPKRInputService extends InputMethodService {
                 String errMsg = "Error: " + errorMeaning;
                 tv.setText(errMsg);
 
-                micButton.setImageResource(R.drawable.mic_ready);
+                micButton.setImageResource(R.drawable.microphone_ready);
                 buttonHearSpokenAudio.setEnabled(false);
                 buttonSendTranslatedText.setEnabled(false);
             }
@@ -476,7 +476,7 @@ public class SPKRInputService extends InputMethodService {
                 ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 SpeechToTextOP = data.get(0);
                 tv.setText(data.get(0));
-                micButton.setImageResource(R.drawable.mic_ready);
+                micButton.setImageResource(R.drawable.microphone_ready);
             }
 
             @Override
