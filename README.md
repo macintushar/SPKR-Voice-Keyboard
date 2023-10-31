@@ -2,7 +2,7 @@
 
 # Instructions
 To build this project for yourself, you need to do the following steps:
-1. create a folder called assets SPKRVoiceKeyboard/app/src/main/
+1. create a folder called assets in `SPKRVoiceKeyboard/app/src/main/`
 2. Add a file called credentials.json and add the following value:
    ```
     {
